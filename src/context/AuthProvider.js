@@ -1,11 +1,32 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import app from '../firebase/firebase.config';
+import { getAuth, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 
 export const AuthContext = createContext();
+const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
-    const user = { displayName: 'Batas Ali' }
+    const [user, setUser] = useState(null);
 
-    const authInfo = { user };
+    //sending auth to the RightSideNav
+    const providerLogin = (provider) => {
+        return signInWithPopup(auth, provider);
+    }
+
+    //to get current login user
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            console.log('inside auth state change', currentUser);
+            setUser(currentUser)
+        });
+
+        return () => {
+            unsubscribe();
+        }
+
+    }, [])
+
+    const authInfo = { user, providerLogin };
     return (
 
         <AuthContext.Provider value={authInfo}>
