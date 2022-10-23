@@ -1,13 +1,25 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 const News = () => {
-    const newsDetails = useLoaderData();
-    console.log(newsDetails);
+    const news = useLoaderData();
+    console.log(news);
+    const { title, details, image_url, category_id } = news;
     return (
-        <div>
-            <h2>This is News {newsDetails.title}</h2>
-        </div>
+        <Card>
+            <Card.Img variant="top" src={image_url} />
+            <Card.Body>
+                <Card.Title>{title}</Card.Title>
+                <Card.Text>
+                    {details}
+                </Card.Text>
+                <Link to={`/category/${category_id}`}>
+                    <Button variant="primary">All news in this category</Button>
+                </Link>
+            </Card.Body>
+        </Card>
     );
 };
 
