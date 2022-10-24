@@ -7,7 +7,7 @@ import { AuthContext } from '../../context/AuthProvider';
 const Register = () => {
     const [error, setError] = useState('');
     const [accepted, setAccepted] = useState(false);
-    const { createUser } = useContext(AuthContext);
+    const { createUser, updateUserProfile } = useContext(AuthContext);
 
     //to get from value and create user
     const handleSubmit = event => {
@@ -17,7 +17,7 @@ const Register = () => {
         const photoURL = form.photoURL.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name, photoURL, email, password);
+        // console.log(name, photoURL, email, password);
 
         createUser(email, password)
             .then(result => {
@@ -25,11 +25,22 @@ const Register = () => {
                 console.log(user);
                 form.reset();
                 setError('');
+                handleUpdateUserProfile(name, photoURL);
             })
             .catch(e => {
                 console.error(e);
                 setError(e.message);
             });
+    }
+
+    const handleUpdateUserProfile = (name, photoURL) => {
+        const profile = {
+            displayName: name,
+            photoURL: photoURL
+        }
+        updateUserProfile(profile)
+            .then(() => { })
+            .catch(error => console.error(error));
     }
 
     //get chacked value(true/false)
