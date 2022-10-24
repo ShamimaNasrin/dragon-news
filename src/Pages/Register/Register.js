@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 
 const Register = () => {
     const [error, setError] = useState('');
     const [accepted, setAccepted] = useState(false);
-    const { createUser, updateUserProfile } = useContext(AuthContext);
+    const { createUser, updateUserProfile, verifyEmail } = useContext(AuthContext);
 
     //to get from value and create user
     const handleSubmit = event => {
@@ -26,6 +27,8 @@ const Register = () => {
                 form.reset();
                 setError('');
                 handleUpdateUserProfile(name, photoURL);
+                handleEmailVerification();
+                toast.success('Please verify your email address.');
             })
             .catch(e => {
                 console.error(e);
@@ -33,12 +36,20 @@ const Register = () => {
             });
     }
 
+    //to get userName and Photo to the database
     const handleUpdateUserProfile = (name, photoURL) => {
         const profile = {
             displayName: name,
             photoURL: photoURL
         }
         updateUserProfile(profile)
+            .then(() => { })
+            .catch(error => console.error(error));
+    }
+
+    //send email verification email
+    const handleEmailVerification = () => {
+        verifyEmail()
             .then(() => { })
             .catch(error => console.error(error));
     }
