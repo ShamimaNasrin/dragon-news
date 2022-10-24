@@ -8,8 +8,9 @@ const Login = () => {
     const [error, setError] = useState('');
     const { signIn } = useContext(AuthContext);
     const navigate = useNavigate();
+    
+    //to receive current location from PrivateRoute
     const location = useLocation();
-
     const from = location?.state?.from.pathname || '/';
 
     const handleSubmit = event => {
